@@ -1,41 +1,49 @@
 package com.bl.java.lambdaexpression;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
-public class MathOperationApp {
 
-    public static void main(String[] args) {
-
-        // Create a List of numbers
-        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
-
-        // 1. Using a Proper Class for Iteration
-        System.out.println("Using a Proper Class:");
-        NumberConsumer numberConsumer = new NumberConsumer();  // Create an instance of the class
-        numbers.forEach(numberConsumer);  // Pass the class to forEach
-
-        // 2. Using Anonymous Class for Iteration
-        System.out.println("\nUsing an Anonymous Class:");
-        numbers.forEach(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer number) {
-                System.out.println("Number: " + number);
-            }
-        });
-
-        // 3. Using Lambda Expression for Iteration
-        System.out.println("\nUsing a Lambda Expression:");
-        numbers.forEach(number -> System.out.println("Number: " + number));
+    //Functional interface for conversion
+    @FunctionalInterface
+    interface NumberConverter {
+        double convert(int number);
     }
 
-}
-    // 1. Define a Proper Class for Iteration
-    class NumberConsumer implements Consumer<Integer> {
-        @Override
-        public void accept(Integer number) {
-            System.out.println("Number: " + number);
+    class NumberPlaylist {
+        private List<Integer> numbers;
+
+        public NumberPlaylist() {
+            numbers = new ArrayList<>();
+        }
+
+        public void addNumber(int number) {
+            numbers.add(number);
+        }
+
+        public List<Integer> getNumbers() {
+            return numbers;
         }
     }
+
+public class MathOperationApp {
+    public static void main(String[] args) {
+
+        NumberPlaylist playlist = new NumberPlaylist();
+        playlist.addNumber(1);
+        playlist.addNumber(2);
+        playlist.addNumber(3);
+        playlist.addNumber(4);
+        playlist.addNumber(5);
+
+        //Define the conversion using a lambda expression
+        NumberConverter toDouble = number -> (double) number;
+
+        System.out.println("Converting numbers to double and printing:");
+        playlist.getNumbers().forEach(number -> {
+            double convertedNumber = toDouble.convert(number);
+            System.out.println("Number as Double: " + convertedNumber);
+        });
+    }
+}
 
