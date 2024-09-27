@@ -1,59 +1,41 @@
 package com.bl.java.lambdaexpression;
 
-import java.util.Scanner;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class MathOperationApp {
 
-    // Functional interface for the math operations
-    @FunctionalInterface
-    interface MathOperation {
-        double operate(double a, double b);
-    }
-
-    // Functional interface for displaying results
-    @FunctionalInterface
-    interface ResultDisplay {
-        void display(String message);
-    }
-
-    // Method to perform the operation
-    private static double performOperation(double a, double b, MathOperation operation) {
-        return operation.operate(a, b);
-    }
-
-    // Method to display the result
-    private static void displayResult(String operationType, double a, double b, MathOperation operation, ResultDisplay display) {
-        double result = performOperation(a, b, operation);
-        display.display("Result of " + operationType + " is " + result);
-    }
-
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        // Input numbers
-        System.out.print("Enter first number: ");
-        double num1 = scanner.nextDouble();
+        // Create a List of numbers
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
 
-        System.out.print("Enter second number: ");
-        double num2 = scanner.nextDouble();
+        // 1. Using a Proper Class for Iteration
+        System.out.println("Using a Proper Class:");
+        NumberConsumer numberConsumer = new NumberConsumer();  // Create an instance of the class
+        numbers.forEach(numberConsumer);  // Pass the class to forEach
 
-        // Lambda expressions for operations
-        MathOperation addition = (a, b) -> a + b;
-        MathOperation subtraction = (a, b) -> a - b;
-        MathOperation division = (a, b) -> {
-            if (b == 0) {
-                throw new ArithmeticException("Division by zero is not allowed.");
+        // 2. Using Anonymous Class for Iteration
+        System.out.println("\nUsing an Anonymous Class:");
+        numbers.forEach(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer number) {
+                System.out.println("Number: " + number);
             }
-            return a / b;
-        };
+        });
 
-        // Lambda expression for displaying results
-        ResultDisplay resultDisplay = message -> System.out.println(message);
-
-        // Performing operations and displaying results
-        displayResult("Addition", num1, num2, addition, resultDisplay);
-        displayResult("Subtraction", num1, num2, subtraction, resultDisplay);
-        displayResult("Division", num1, num2, division, resultDisplay);
-
+        // 3. Using Lambda Expression for Iteration
+        System.out.println("\nUsing a Lambda Expression:");
+        numbers.forEach(number -> System.out.println("Number: " + number));
     }
+
 }
+    // 1. Define a Proper Class for Iteration
+    class NumberConsumer implements Consumer<Integer> {
+        @Override
+        public void accept(Integer number) {
+            System.out.println("Number: " + number);
+        }
+    }
+
